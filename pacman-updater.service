@@ -1,0 +1,12 @@
+[Unit]
+Description=Pacman Updater Script
+After=network.target
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+TimeoutStartSec=0
+ExecStart=/home/nova/.scripts/pacman-updater.sh
+
+[Install]
+WantedBy=multi-user.target
