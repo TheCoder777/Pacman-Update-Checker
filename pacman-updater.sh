@@ -2,8 +2,9 @@
 
 # DISPLAY=:0
 # DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+PATTERN=">"
 
-sleep 10
+sleep 1
 
 while true; do
     updates=$(checkupdates)
@@ -11,10 +12,10 @@ while true; do
         dunstify --urgency=NORMAL -a "UPDATE SCRIPT" -i check-filled "System ist up to date!"
 
     else # updates
-        count=$(echo $updates | wc -l)
-        if [[ $count=="1" ]]; then # single update
+        count=$(grep -o "$PATTERN" <<< "$updates" | wc -l )
+        echo $count
+        if [[ $count == "1" ]]; then # single update
             answer=$(dunstify --urgency=NORMAL -a "UPDATE SCRIPT" -i draw-arrow-down -t 10000 -A Y,"Update now" -A N,Later "$count new Update aviable!" "$(checkupdates)")
-            echo $answer
         else # multiple updates
             answer=$(dunstify --urgency=NORMAL -a "UPDATE SCRIPT" -i draw-arrow-down -t 10000 -A Y,"Update now" -A N,Later "$count new Updates aviable!" "$(checkupdates)")
         fi
@@ -24,9 +25,9 @@ while true; do
             ;;
     	    N)
     		;;
-    	    *) echo "'$answer' no match" 1>&2
+    	    *)
     		;;
         esac
     fi
-    sleep 18000
+    sleep 18000  # 5 hours
 done
