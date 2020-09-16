@@ -13,7 +13,6 @@ while true; do
 
     else # updates
         count=$(grep -o "$PATTERN" <<< "$updates" | wc -l )
-        echo $count
         if [[ $count == "1" ]]; then # single update
             answer=$(dunstify --urgency=NORMAL -a "UPDATE SCRIPT" -i draw-arrow-down -t 10000 -A Y,"Update now" -A N,Later "$count new Update aviable!" "$(checkupdates)")
         else # multiple updates
@@ -21,7 +20,7 @@ while true; do
         fi
 
         case $answer in
-            Y) /usr/bin/termite --hold -e 'sudo pacman -Syu'
+            Y) /usr/bin/termite --hold -e './command.sh'
             ;;
     	    N)
     		;;
